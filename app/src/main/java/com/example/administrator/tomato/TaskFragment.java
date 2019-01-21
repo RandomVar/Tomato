@@ -5,6 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +23,9 @@ public class TaskFragment extends Fragment {
     private static final String LOG_TAG = TaskFragment.class.getSimpleName();
 
     private int position;
+    private TaskViewerAdapter mTaskViewerAdapter;
 
-    //Recording controls
-    private FloatingActionButton mRecordButton = null;
+    private FloatingActionButton addButton = null;
 
     public TaskFragment() {
         // Required empty public constructor
@@ -46,15 +49,34 @@ public class TaskFragment extends Fragment {
 
         }
     }
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_task, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_task, container, false);
+
+        RecyclerView mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+
+        //newest to oldest order (database stores from oldest to newest)
+        llm.setReverseLayout(true);
+        llm.setStackFromEnd(true);
+        //倒序展示，RecyclerView自动滑动到最后
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //加入一个任务
+            }
+        });
+
+        mRecyclerView.setLayoutManager(llm);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mTaskViewerAdapter = new TaskViewerAdapter(getActivity(), llm);
+        mRecyclerView.setAdapter(mTaskViewerAdapter);
+
+        return v;
     }
-
-
-
 
 }
