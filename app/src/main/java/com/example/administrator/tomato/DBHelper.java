@@ -30,27 +30,40 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_IS_FINISHED="is_finished";
     }
 
+    public static abstract class VisibleItem implements BaseColumns {
+        public static final String TABLE_NAME = "visible_tasks";
+        public static final String COLUMN_NAME_TASK_ID = "task_id";
+
+    }
     private static final String CREATE_TASK =
             "CREATE TABLE " + TaskItem.TABLE_NAME + " (" +
                     TaskItem._ID + " INTEGER PRIMARY KEY" +","+
-                    TaskItem. COLUMN_NAME_TASK_NAME + "TEXT" + ","+
-                    TaskItem. COLUMN_NAME_TASK_LENGTH + "INTEGER" +")";
+                    TaskItem. COLUMN_NAME_TASK_NAME + " TEXT" + ","+
+                    TaskItem. COLUMN_NAME_TASK_LENGTH + " INTEGER" +")";
 
     private static final String CREATE_PERFORM =
             "CREATE TABLE " + PerformItem.TABLE_NAME + " (" +
                     PerformItem._ID + " INTEGER PRIMARY KEY" +","+
-                    PerformItem.COLUMN_NAME_TASK_ID + "INTEGER" +","+
-                    PerformItem.COLUMN_NAME_START_TIME+ "INTEGER" +","+
-                    PerformItem.COLUMN_NAME_PREFORM_LENGTH + "INTEGER" +","+
-                    PerformItem.COLUMN_NAME_IS_FINISHED + "INTEGER" +","+
-                    "FOREIGN KEY("+ PerformItem.COLUMN_NAME_TASK_ID+")"+
+                    PerformItem.COLUMN_NAME_TASK_ID + " INTEGER" +","+
+                    PerformItem.COLUMN_NAME_START_TIME+ " INTEGER" +","+
+                    PerformItem.COLUMN_NAME_PREFORM_LENGTH + " INTEGER" +","+
+                    PerformItem.COLUMN_NAME_IS_FINISHED + " INTEGER" +","+
+                    "FOREIGN KEY("+ PerformItem.COLUMN_NAME_TASK_ID+") "+
                     "REFERENCES "+TaskItem.TABLE_NAME+"("+TaskItem._ID+")"+")";
+
+    private static final String CREATE_VISIBLE =
+            "CREATE TABLE " + VisibleItem.TABLE_NAME + " (" +
+                    VisibleItem._ID + " INTEGER PRIMARY KEY" +","+
+                    VisibleItem. COLUMN_NAME_TASK_ID + " INTEGER" + ","+
+                    "FOREIGN KEY("+ VisibleItem.COLUMN_NAME_TASK_ID+") "+
+                    "REFERENCES "+TaskItem.TABLE_NAME+"("+TaskItem._ID+")"+ ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(CREATE_TASK);
         db.execSQL(CREATE_PERFORM);
+        db.execSQL(CREATE_VISIBLE);
     }
 
     @Override
@@ -63,7 +76,7 @@ public class DBHelper extends SQLiteOpenHelper {
         mContext = context;
     }
 
-    //需要：如果表2中没有任务记录则删
+    //如果表2中没有任务记录则删
     public void removeTaskWithId(int id) {
         SQLiteDatabase db = getWritableDatabase();
         String[] whereArgs = { String.valueOf(id) };
@@ -79,6 +92,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return mContext;
     }
 
+    public int getTaskCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = { TaskItem._ID };
+        Cursor c = db.query(TaskItem.TABLE_NAME, projection, null, null, null, null, null);
+        int count = c.getCount();
+        c.close();
+        return count;
+    }
+
 
     public long addTask(String TaskName,long length) {
 
@@ -87,6 +109,10 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(TaskItem.COLUMN_NAME_TASK_NAME, TaskName);
         cv.put(TaskItem.COLUMN_NAME_TASK_LENGTH, length);
         long rowId = db.insert(TaskItem.TABLE_NAME, null, cv);
+        //rowId应该等于id吧…
+        cv.clear();
+        cv.put(VisibleItem.COLUMN_NAME_TASK_ID,rowId);
+        rowId=db.insert(VisibleItem.TABLE_NAME, null, cv);
         return rowId;
     }
 
@@ -98,6 +124,27 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(TaskItem.TABLE_NAME, cv,
                 TaskItem._ID + "=" + id, null);
     }
+
+    //得到对应id的任务信息
+    public TaskInf getTask(int id)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {TaskItem._ID,TaskItem.COLUMN_NAME_TASK_NAME,TaskItem.COLUMN_NAME_TASK_LENGTH};
+        Cursor c = db.query(TaskItem.TABLE_NAME, projection, TaskItem._ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+
+        if(c.moveToFirst()!=false) {
+           TaskInf item = new TaskInf();
+           item.setId(c.getInt(c.getColumnIndex(TaskItem._ID)));
+           item.setName(c.getString(c.getColumnIndex(TaskItem.COLUMN_NAME_TASK_NAME)));
+           item.setLength(c.getInt(c.getColumnIndex(TaskItem.COLUMN_NAME_TASK_LENGTH)));
+           c.close();
+           return item;
+       }
+       Log.d(LOG_TAG,"error");
+       return null;
+      }
+
+
 
     public long addPerform(int id,long startTime,long length)
     {
@@ -115,6 +162,28 @@ public class DBHelper extends SQLiteOpenHelper {
         c.close();
         long rowId=db.insert(PerformItem.TABLE_NAME, null, cv);
        return rowId;
+    }
+
+    //通过Visible表得到视图中position个任务在task表中的编号
+    public int getItemAt(int position) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {VisibleItem.COLUMN_NAME_TASK_ID};
+        Cursor c = db.query(VisibleItem.TABLE_NAME, projection, null, null, null, null, null);
+        if (c.moveToPosition(position)) {
+            int value= c.getInt(c.getColumnIndex(VisibleItem.COLUMN_NAME_TASK_ID));
+
+            c.close();
+            return value;
+        }
+        return -1;
+    }
+
+
+    public void deleteFromVisible(int id)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+        String[] whereArgs = { String.valueOf(id) };
+        db.delete(VisibleItem.TABLE_NAME, "_ID=?", whereArgs);
     }
 
 

@@ -14,7 +14,7 @@
         card_view:cardCornerRadius="4dp"
         card_view:cardElevation="3dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -26,10 +26,24 @@
                     android:textSize="20sp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/task_length"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="20dp"
+                android:text="task_length"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
