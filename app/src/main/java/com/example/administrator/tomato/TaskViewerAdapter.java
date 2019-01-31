@@ -37,11 +37,15 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
     @Override
     public void onBindViewHolder(final TasksViewHolder holder, int position) {
         int itemId = mDatabase.getItemAt(position);
+        Log.d(LOG_TAG,String.valueOf(position));
         Log.d(LOG_TAG,String.valueOf(itemId));
         item=mDatabase.getTask(itemId);
-
+        Log.d(LOG_TAG,String.valueOf(item==null));
+        Log.d(LOG_TAG,String.valueOf(item.getId()));
+        Log.d(LOG_TAG,item.getName());
+        Log.d(LOG_TAG,String.valueOf(item.getLength()));
         holder.vName.setText(item.getName());
-        holder.vLength.setText(item.getLength());
+        holder.vLength.setText(String.valueOf(item.getLength()));
 
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -56,7 +60,7 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
             public boolean onLongClick(View v) {
                //弹出修改/删除任务窗口
                 ArrayList<String> entrys = new ArrayList<String>();
-                entrys.add("Upate Task");
+                entrys.add("Update Task");
                 entrys.add("Delete Task");
 
                 final CharSequence[] items = entrys.toArray(new CharSequence[entrys.size()]);
@@ -116,7 +120,8 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
 
     @Override
     public int getItemCount() {
-        return mDatabase.getTaskCount();
+        Log.d("count",String.valueOf( mDatabase.getVisibleCount()));
+        return mDatabase.getVisibleCount();
     }
 
     public void remove(int position) {
@@ -125,7 +130,6 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
         int itemId=mDatabase.getItemAt(position);
         mDatabase.deleteFromVisible(itemId);
         Toast.makeText(mContext,"delete succesfully",Toast.LENGTH_SHORT).show();
-        //存储中删除
         notifyItemRemoved(position);
     }
     public void updateTask(int position, String name,long length) {
@@ -136,8 +140,9 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
         }
         public void addTask(String name,long length)
         {
-            long pos= mDatabase.addTask(name,length);
-            notifyItemInserted((int)pos);
+            mDatabase.addTask(name,length);
+            notifyItemInserted(getItemCount() - 1);
+            llm.scrollToPosition(getItemCount() - 1);
         }
 
 

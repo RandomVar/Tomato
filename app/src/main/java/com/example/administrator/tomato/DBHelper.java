@@ -35,12 +35,13 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_TASK_ID = "task_id";
 
     }
+    //创建任务表
     private static final String CREATE_TASK =
             "CREATE TABLE " + TaskItem.TABLE_NAME + " (" +
                     TaskItem._ID + " INTEGER PRIMARY KEY" +","+
                     TaskItem. COLUMN_NAME_TASK_NAME + " TEXT" + ","+
                     TaskItem. COLUMN_NAME_TASK_LENGTH + " INTEGER" +")";
-
+    //创建任务执行情况表
     private static final String CREATE_PERFORM =
             "CREATE TABLE " + PerformItem.TABLE_NAME + " (" +
                     PerformItem._ID + " INTEGER PRIMARY KEY" +","+
@@ -50,7 +51,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     PerformItem.COLUMN_NAME_IS_FINISHED + " INTEGER" +","+
                     "FOREIGN KEY("+ PerformItem.COLUMN_NAME_TASK_ID+") "+
                     "REFERENCES "+TaskItem.TABLE_NAME+"("+TaskItem._ID+")"+")";
-
+    //创建记录可见任务的表
     private static final String CREATE_VISIBLE =
             "CREATE TABLE " + VisibleItem.TABLE_NAME + " (" +
                     VisibleItem._ID + " INTEGER PRIMARY KEY" +","+
@@ -92,6 +93,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return mContext;
     }
 
+    //共有任务数量
     public int getTaskCount() {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = { TaskItem._ID };
@@ -102,6 +104,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+  //加入一项任务
     public long addTask(String TaskName,long length) {
 
         SQLiteDatabase db = getWritableDatabase();
@@ -109,13 +112,19 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(TaskItem.COLUMN_NAME_TASK_NAME, TaskName);
         cv.put(TaskItem.COLUMN_NAME_TASK_LENGTH, length);
         long rowId = db.insert(TaskItem.TABLE_NAME, null, cv);
-        //rowId应该等于id吧…
+        Cursor c=db.query(TaskItem.TABLE_NAME,new String[]{TaskItem._ID},null,null,null,null,null);
+        c.moveToPosition((int) (rowId-1));
+        int id=c.getInt(c.getColumnIndex(TaskItem._ID));
+
+        Log.d("rowid1",String.valueOf(rowId));
+        Log.d("id",String.valueOf(id));
         cv.clear();
-        cv.put(VisibleItem.COLUMN_NAME_TASK_ID,rowId);
+        cv.put(VisibleItem.COLUMN_NAME_TASK_ID,id);
         rowId=db.insert(VisibleItem.TABLE_NAME, null, cv);
+        Log.d("rowid2",String.valueOf(rowId));
         return rowId;
     }
-
+    //更新任务信息
     public void updateTask(int id, String newName,long newLength) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -145,7 +154,7 @@ public class DBHelper extends SQLiteOpenHelper {
       }
 
 
-
+    //开始一项任务
     public long addPerform(int id,long startTime,long length)
     {
         SQLiteDatabase db = getWritableDatabase();
@@ -178,7 +187,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return -1;
     }
 
-
+    //可见的数据数量
+    public int getVisibleCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = { VisibleItem._ID };
+        Cursor c = db.query(VisibleItem.TABLE_NAME, projection, null, null, null, null, null);
+        int count = c.getCount();
+        c.close();
+        return count;
+    }
+    //在可见表中删除一项任务
     public void deleteFromVisible(int id)
     {
         SQLiteDatabase db = getWritableDatabase();
