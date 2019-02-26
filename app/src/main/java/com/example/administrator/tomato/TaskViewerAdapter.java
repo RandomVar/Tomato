@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -53,6 +54,11 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
            public void onClick(View view) {
             //开始任务
                //开始倒计时的界面
+               int id=mDatabase.getItemAt(holder.getPosition());
+               Intent intent = new Intent(mContext,CountDownActivity.class);
+               //Intent第一个参数是上下文，第二个参数作为目标活动
+               intent.putExtra("task_id", id);
+               mContext.startActivity(intent);
            }
        });
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {

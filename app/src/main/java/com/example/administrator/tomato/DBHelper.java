@@ -154,21 +154,22 @@ public class DBHelper extends SQLiteOpenHelper {
       }
 
 
-    //开始一项任务
-    public long addPerform(int id,long startTime,long length)
+    //完成一次任务
+    public long addPerform(int id,long startTime,long length,boolean isFinished)
     {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(PerformItem.COLUMN_NAME_TASK_ID,id);
         cv.put(PerformItem.COLUMN_NAME_START_TIME,startTime);
         cv.put(PerformItem.COLUMN_NAME_PREFORM_LENGTH,length);
-        String[] projection = { TaskItem.COLUMN_NAME_TASK_LENGTH};
-        Cursor c=db.query(TaskItem.TABLE_NAME,projection,TaskItem._ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
-        long finish=c.getInt(c.getColumnIndex(TaskItem.COLUMN_NAME_TASK_LENGTH));
-        if(length>=finish)
-            cv.put(PerformItem.COLUMN_NAME_IS_FINISHED,1);
-        else cv.put(PerformItem.COLUMN_NAME_IS_FINISHED,0);
-        c.close();
+        cv.put(PerformItem.COLUMN_NAME_IS_FINISHED,isFinished);
+//        String[] projection = { TaskItem.COLUMN_NAME_TASK_LENGTH};
+//        Cursor c=db.query(TaskItem.TABLE_NAME,projection,TaskItem._ID+"=?", new String[]{String.valueOf(id)}, null, null, null);
+//        long finish=c.getInt(c.getColumnIndex(TaskItem.COLUMN_NAME_TASK_LENGTH));
+//        if(length>=finish)
+//            cv.put(PerformItem.COLUMN_NAME_IS_FINISHED,1);
+//        else cv.put(PerformItem.COLUMN_NAME_IS_FINISHED,0);
+//        c.close();
         long rowId=db.insert(PerformItem.TABLE_NAME, null, cv);
        return rowId;
     }
