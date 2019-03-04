@@ -3,13 +3,10 @@ package com.example.administrator.tomato;
 
 import android.app.AlertDialog;
 import android.content.Context;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,15 +63,15 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
             public boolean onLongClick(View v) {
                //弹出修改/删除任务窗口
                 ArrayList<String> entrys = new ArrayList<String>();
-                entrys.add("Update Task");
-                entrys.add("Delete Task");
+                entrys.add("编辑任务");
+                entrys.add("删除任务");
 
                 final CharSequence[] items = entrys.toArray(new CharSequence[entrys.size()]);
 
 
                 // File delete confirm
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Options");
+                builder.setTitle("操作");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item == 0) {

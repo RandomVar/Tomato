@@ -16,12 +16,14 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "tasks.db";
     private static final int DATABASE_VERSION = 1;
 
+    //应该是保存任务的表
     public static abstract class TaskItem implements BaseColumns {
         public static final String TABLE_NAME = "saved_tasks";
         public static final String COLUMN_NAME_TASK_NAME = "task_name";
         public static final String COLUMN_NAME_TASK_LENGTH="task_length";
     }
 
+    //历史记录？
     public static abstract class PerformItem implements BaseColumns {
         public static final String TABLE_NAME = "performed_tasks";
         public static final String COLUMN_NAME_TASK_ID= "task_id";
@@ -30,6 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String COLUMN_NAME_IS_FINISHED="is_finished";
     }
 
+    //可见的任务
     public static abstract class VisibleItem implements BaseColumns {
         public static final String TABLE_NAME = "visible_tasks";
         public static final String COLUMN_NAME_TASK_ID = "task_id";
@@ -39,8 +42,11 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String CREATE_TASK =
             "CREATE TABLE " + TaskItem.TABLE_NAME + " (" +
                     TaskItem._ID + " INTEGER PRIMARY KEY" +","+
+                    //任务id，自动增长
                     TaskItem. COLUMN_NAME_TASK_NAME + " TEXT" + ","+
+                    //任务名
                     TaskItem. COLUMN_NAME_TASK_LENGTH + " INTEGER" +")";
+                    //任务时长
     //创建任务执行情况表
     private static final String CREATE_PERFORM =
             "CREATE TABLE " + PerformItem.TABLE_NAME + " (" +

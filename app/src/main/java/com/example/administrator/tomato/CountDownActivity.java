@@ -3,22 +3,15 @@ package com.example.administrator.tomato;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.io.Console;
 
 public class CountDownActivity extends AppCompatActivity {
    private String TAG="CountDownActivity";
@@ -71,40 +64,41 @@ public class CountDownActivity extends AppCompatActivity {
     }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode==KeyEvent.KEYCODE_BACK){
-        Log.e(TAG, "onBackPressed: 按下了返回键");
-        if(!isFinish)
+        if (keyCode==KeyEvent.KEYCODE_BACK)
         {
-            AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CountDownActivity.this);
-            confirmDelete.setTitle("取消任务");
-            confirmDelete.setMessage("这项任务还未完成您确认要取消这项任务吗？");
-            confirmDelete.setCancelable(true);
-            confirmDelete.setPositiveButton(getString(R.string.dialog_action_ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            try {
+            Log.e(TAG, "onBackPressed: 按下了返回键");
+            if(!isFinish)
+            {
+                AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CountDownActivity.this);
+                confirmDelete.setTitle("取消任务");
+                confirmDelete.setMessage("这项任务还未完成您确认要取消这项任务吗？");
+                confirmDelete.setCancelable(true);
+                confirmDelete.setPositiveButton(getString(R.string.dialog_action_ok),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                try {
 
-                                mDataBase.addPerform(id,startTime,SystemClock.elapsedRealtime()-startTime,isFinish);
-                                finish();
-                            } catch (Exception e) {
-                                Log.e(TAG, "exception", e);
+                                    mDataBase.addPerform(id,startTime,SystemClock.elapsedRealtime()-startTime,isFinish);
+                                    finish();
+                                } catch (Exception e) {
+                                    Log.e(TAG, "exception", e);
+                                }
+
+                                dialog.cancel();
                             }
+                        });
+                confirmDelete.setNegativeButton(getString(R.string.dialog_action_cancel),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
 
-                            dialog.cancel();
-                        }
-                    });
-            confirmDelete.setNegativeButton(getString(R.string.dialog_action_cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                AlertDialog alert = confirmDelete.create();
+                alert.show();
+            }
 
-            AlertDialog alert = confirmDelete.create();
-            alert.show();
-                   }
-
-    }
+        }
         return super.onKeyDown(keyCode, event);
     }
 
