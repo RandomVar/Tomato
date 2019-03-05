@@ -79,7 +79,7 @@ public class FetchDataToGraph {
         for(int i = 0; i<typeNum; i++)
         {
             part[i] = ((float)time[i])/sum;
-//            part[i]=(int)(part[i]*100);
+            part[i]=(int)(part[i]*100);
             //pieData.addDataSet(part[i]);
 
             PieEntry tempPieEntry = new PieEntry(part[i],taskName[i]);
