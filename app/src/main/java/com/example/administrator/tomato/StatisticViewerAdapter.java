@@ -1,6 +1,7 @@
 package com.example.administrator.tomato;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.PieData;
 
 public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -28,9 +31,11 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static class LineChartViewHolder extends RecyclerView.ViewHolder {
 //        public int type = 0;
         protected TextView textView;
+        protected LineChart lineChart;
         public LineChartViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.test_text);
+            lineChart = (LineChart) itemView.findViewById(R.id.line_chart);
 //            textView.setText("test");
         }
     }
@@ -95,6 +100,7 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //            String string ="testtest"+Integer.toString(mDataBase.getTaskCount());
             String string ="testtest"+ fetchDataToGraph.test();
             lineChartViewHolder.textView.setText(string);
+//            lineChartViewHolder.lineChart
         }
         else if(holder instanceof PieChartViewHolder)
         {
@@ -104,6 +110,11 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             FetchDataToGraph fetchDataToGraph1 = new FetchDataToGraph(mContext);
             PieChartViewHolder pieChartViewHolder = (PieChartViewHolder) holder;
             PieData piedata = fetchDataToGraph.getDataToPiechart();
+            Description description = new Description();
+            description.setEnabled(false);
+            pieChartViewHolder.pieChart.setDescription(description);
+            pieChartViewHolder.pieChart.setEntryLabelTextSize(20);
+            pieChartViewHolder.pieChart.setEntryLabelColor(Color.BLACK);
             pieChartViewHolder.pieChart.setData(piedata);
             pieChartViewHolder.pieChart.postInvalidate();
         }
