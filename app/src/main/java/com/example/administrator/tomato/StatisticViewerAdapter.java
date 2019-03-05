@@ -101,6 +101,10 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             String string ="testtest"+ fetchDataToGraph.test();
             lineChartViewHolder.textView.setText(string);
 //            lineChartViewHolder.lineChart
+            LineChart lineChart = lineChartViewHolder.lineChart;
+
+            //这里对折线图操作
+
         }
         else if(holder instanceof PieChartViewHolder)
         {
