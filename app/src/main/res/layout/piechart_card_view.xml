@@ -12,6 +12,7 @@
         android:text="不同任务统计" />
 
     <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/piechart"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
 </LinearLayout>

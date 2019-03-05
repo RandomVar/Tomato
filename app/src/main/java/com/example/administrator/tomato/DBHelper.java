@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DBHelper extends SQLiteOpenHelper {
     private Context mContext;
 
@@ -157,8 +160,35 @@ public class DBHelper extends SQLiteOpenHelper {
        }
        Log.d(LOG_TAG,"error");
        return null;
-      }
+    }
 
+    public List getPerform()
+    {
+        List list = new ArrayList();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "select a.task_name, b.task_id, b.length from saved_tasks as a, performed_tasks as b where a._id = b.task_id";
+        Cursor c = db.rawQuery(sql,null);
+
+        while(c.moveToNext()){
+            PerformInf item = new PerformInf();
+            String taskName = c.getString(0);
+            int id = c.getInt(1);
+            int time = c.getInt(2);
+
+            item.setId(id);
+            item.setLength(time);
+            item.setName(taskName);
+
+            list.add(item);
+//            int personid = cursor.getInt(0); //获取第一列的值,第一列的索引从0开始
+//            String name = cursor.getString(1);//获取第二列的值
+//            int age = cursor.getInt(2);//获取第三列的值
+        }
+        c.close();
+        return list;
+    }
 
     //完成一次任务
     public long addPerform(int id,long startTime,long length,boolean isFinished)

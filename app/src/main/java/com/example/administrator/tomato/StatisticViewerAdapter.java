@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+
 public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String LOG_TAG = "StatisticViewerAdapter";
     private Context mContext;
@@ -36,9 +39,11 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public static class PieChartViewHolder extends RecyclerView.ViewHolder {
 //        public int type = 1;
         protected TextView textView;
+        protected PieChart pieChart;
         public PieChartViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.pie_chart_text);
+            pieChart = (PieChart) itemView.findViewById(R.id.piechart);
         }
     }
 
@@ -82,10 +87,13 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
 //        if (holder == null)
 //            System.out.println("Right!");
+        FetchDataToGraph fetchDataToGraph = new FetchDataToGraph(mContext);
         if (holder instanceof LineChartViewHolder)
         {
+
             LineChartViewHolder lineChartViewHolder = (LineChartViewHolder) holder;
-            String string ="testtest"+Integer.toString(mDataBase.getTaskCount());
+//            String string ="testtest"+Integer.toString(mDataBase.getTaskCount());
+            String string ="testtest"+ fetchDataToGraph.test();
             lineChartViewHolder.textView.setText(string);
         }
         else if(holder instanceof PieChartViewHolder)
@@ -93,7 +101,11 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 //            PieChartViewHolder pieChartViewHolder = (PieChartViewHolder) holder;
 //            String string ="testtesttest";
 //            pieChartViewHolder.textView.setText(string);
-
+            FetchDataToGraph fetchDataToGraph1 = new FetchDataToGraph(mContext);
+            PieChartViewHolder pieChartViewHolder = (PieChartViewHolder) holder;
+            PieData piedata = fetchDataToGraph.getDataToPiechart();
+            pieChartViewHolder.pieChart.setData(piedata);
+            pieChartViewHolder.pieChart.postInvalidate();
         }
 
 
