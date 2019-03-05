@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String LOG_TAG = "StatisticViewerAdapter";
     private Context mContext;
+    private DBHelper mDataBase;
     private LinearLayoutManager llm;
 //    private String [] titles;
     public enum ITEM_TYPE {
@@ -21,20 +23,27 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     //折线
     public static class LineChartViewHolder extends RecyclerView.ViewHolder {
+//        public int type = 0;
+        protected TextView textView;
         public LineChartViewHolder(@NonNull View itemView) {
             super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.test_text);
+//            textView.setText("test");
         }
     }
 
     //扇形
     public static class PieChartViewHolder extends RecyclerView.ViewHolder {
+//        public int type = 1;
+        protected TextView textView;
         public PieChartViewHolder(@NonNull View itemView) {
             super(itemView);
+            textView = (TextView) itemView.findViewById(R.id.pie_chart_text);
         }
     }
 
 //    private int position;
-    private LayoutInflater mLayoutInflater;
+//    private LayoutInflater mLayoutInflater;
 
     public StatisticViewerAdapter(Context context,LinearLayoutManager linearLayoutManager)
     {
@@ -42,28 +51,27 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mContext = context;
         llm = linearLayoutManager;
         chartNumber = 0;
-        mLayoutInflater = LayoutInflater.from(context);
+        mDataBase = new DBHelper(mContext);
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int chartType) {
 
+        View view;
         if (chartType == ITEM_TYPE.LINERCHART.ordinal())
         {
-            return new LineChartViewHolder(
-                    mLayoutInflater.inflate(
-                            R.layout.linechart_card_view, viewGroup,false
-                    )
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(
+                    R.layout.linechart_card_view, viewGroup,false
             );
+            return new LineChartViewHolder(view);
         }
         else
         {
-            return new LineChartViewHolder(
-                    mLayoutInflater.inflate(
-                            R.layout.piechart_card_view, viewGroup,false
-                    )
+            view = LayoutInflater.from(viewGroup.getContext()).inflate(
+                    R.layout.piechart_card_view, viewGroup,false
             );
+            return new PieChartViewHolder(view);
         }
 
     }
@@ -71,6 +79,24 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int i) {
 //        chartViewHolder.charType.setText("month");
+
+//        if (holder == null)
+//            System.out.println("Right!");
+        if (holder instanceof LineChartViewHolder)
+        {
+            LineChartViewHolder lineChartViewHolder = (LineChartViewHolder) holder;
+            String string ="testtest"+Integer.toString(mDataBase.getTaskCount());
+            lineChartViewHolder.textView.setText(string);
+        }
+        else if(holder instanceof PieChartViewHolder)
+        {
+//            PieChartViewHolder pieChartViewHolder = (PieChartViewHolder) holder;
+//            String string ="testtesttest";
+//            pieChartViewHolder.textView.setText(string);
+
+        }
+
+
     }
 
     @Override

@@ -15,4 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"></com.github.mikephil.charting.charts.LineChart>
 
+    <TextView
+        android:id="@+id/test_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
 </LinearLayout>
