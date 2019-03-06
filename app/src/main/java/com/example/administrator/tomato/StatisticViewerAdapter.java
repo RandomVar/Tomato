@@ -46,7 +46,7 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         protected LineChart lineChart;
         public LineChartViewHolder(@NonNull View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.test_text);
+//            textView = (TextView) itemView.findViewById(R.id.test_text);
             lineChart = (LineChart) itemView.findViewById(R.id.line_chart);
 //            textView.setText("test");
         }
@@ -111,19 +111,19 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
             LineChartViewHolder lineChartViewHolder = (LineChartViewHolder) holder;
 //            String string ="testtest"+Integer.toString(mDataBase.getTaskCount());
-            String string = "testtest" + fetchDataToGraph.test();
-            lineChartViewHolder.textView.setText(string);
+//            String string = "testtest" + fetchDataToGraph.test();
+//            lineChartViewHolder.textView.setText(string);
 //            lineChartViewHolder.lineChart
             LineChart lineChart = lineChartViewHolder.lineChart;
 
             //创建描述信息
-            Description description = new Description();
-            description.setText("最近一月的");
-            description.setTextColor(Color.RED);
-            description.setTextSize(20);
-            lineChart.setDescription(description);//设置图表描述信息
-            lineChart.setNoDataText("没有数据熬");//没有数据时显示的文字
-            lineChart.setNoDataTextColor(Color.BLUE);//没有数据时显示文字的颜色
+//            Description description = new Description();
+////            description.setText("最近一月的");
+//            description.setTextColor(Color.RED);
+//            description.setTextSize(20);
+//            lineChart.setDescription(description);//设置图表描述信息
+//            lineChart.setNoDataText("没有数据熬");//没有数据时显示的文字
+//            lineChart.setNoDataTextColor(Color.BLUE);//没有数据时显示文字的颜色
             lineChart.setDrawGridBackground(false);//chart 绘图区后面的背景矩形将绘制
             lineChart.setDrawBorders(false);//禁止绘制图表边框的线
             //lineChart.setBorderColor(); //设置 chart 边框线的颜色。
@@ -164,7 +164,7 @@ public class StatisticViewerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 lineChart.notifyDataSetChanged();
             } else {
 
-                set1 = new LineDataSet(values1, "测试数据1");
+                set1 = new LineDataSet(values1, "任务汇总");
                 set1.setColor(Color.BLACK);
                 set1.setCircleColor(Color.BLACK);
                 set1.setLineWidth(1f);
