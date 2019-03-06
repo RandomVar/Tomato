@@ -21,12 +21,14 @@
         tools:layout_editor_absoluteX="74dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <com.astuetz.PagerSlidingTabStrip
+    <com.example.administrator.tomato.PagerSlidingTabStrip
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/myPrimary"
         android:textColor="@color/white"
+        app:pstsIndicatorColor="@color/myPrimary"
+        app:pstsShouldExpand="true"
         />
 
 </LinearLayout>

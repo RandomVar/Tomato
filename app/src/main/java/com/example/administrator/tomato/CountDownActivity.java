@@ -71,7 +71,7 @@ public class CountDownActivity extends AppCompatActivity {
             {
                 AlertDialog.Builder confirmDelete = new AlertDialog.Builder(CountDownActivity.this);
                 confirmDelete.setTitle("取消任务");
-                confirmDelete.setMessage("这项任务还未完成您确认要取消这项任务吗？");
+                confirmDelete.setMessage("这项任务还未完成。您确认要取消这项任务吗？");
                 confirmDelete.setCancelable(true);
                 confirmDelete.setPositiveButton(getString(R.string.dialog_action_ok),
                         new DialogInterface.OnClickListener() {
