@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MyAdapter extends FragmentPagerAdapter {
-        private String[] titles = { getString(R.string.title_task),
+        private String[] titles = { getString(R.string.title_task)
                 };
 
         public MyAdapter(FragmentManager fm) {
