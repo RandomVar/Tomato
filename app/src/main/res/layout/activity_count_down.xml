@@ -30,18 +30,18 @@
         android:indeterminate="false"
         android:max="100"
         android:progress="0"
-        android:layout_marginTop="60dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+
         />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="任务一旦开始了\n就不能停下来哦"
             android:layout_alignParentBottom="true"
-            android:textSize="30dp"
+            android:textSize="20dp"
+            android:layout_below="@+id/recordProgressBar"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="100dp"
+            android:layout_marginTop="30dp"
             />
        </RelativeLayout>
     <RelativeLayout
@@ -59,7 +59,7 @@
             android:maxWidth="70pt"
             android:maxHeight="70pt"
             android:scaleType="fitCenter"
-            android:layout_marginTop="50dp"
+            android:layout_centerInParent="true"
             android:layout_centerHorizontal="true"
             />
         <TextView
