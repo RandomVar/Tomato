@@ -29,7 +29,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class MyAdapter extends FragmentPagerAdapter {
-        private String[] titles = { getString(R.string.title_task)
+
+        private String[] titles = { getString(R.string.title_task),
+//                "分析",
+                "统计"
                 };
 
         public MyAdapter(FragmentManager fm) {
@@ -40,8 +43,10 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch(position){
                 case 0:{
-//                    return null;
-                return TaskFragment.newInstance(position);
+                    return TaskFragment.newInstance(position);
+                }
+                case 1:{
+                    return StatisticsFragment.newInstance(position);
                 }
 
             }

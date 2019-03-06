@@ -27,5 +27,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/myPrimary"
         android:textColor="@color/white"
+
         />
+
 </LinearLayout>

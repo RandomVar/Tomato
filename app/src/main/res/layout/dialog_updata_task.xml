@@ -17,7 +17,9 @@
         android:id="@+id/task_name"
         android:layout_weight="1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="输入任务名称"
+        />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,13 +27,16 @@
         android:layout_weight="1"
         >
     <TextView
-        android:text="持续时间："
+        android:text="持续时间（min）："
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <EditText
         android:id="@+id/task_length"
         android:layout_weight="1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:digits="1234567890"
+        android:hint="输入时间"
+        />
     </LinearLayout>
 </LinearLayout>

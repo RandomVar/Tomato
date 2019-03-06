@@ -30,10 +30,19 @@
         android:indeterminate="false"
         android:max="100"
         android:progress="0"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="60dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="任务一旦开始了\n就不能停下来哦"
+            android:layout_alignParentBottom="true"
+            android:textSize="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="100dp"
+            />
        </RelativeLayout>
     <RelativeLayout
         android:id="@+id/complete"

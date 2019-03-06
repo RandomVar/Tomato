@@ -3,13 +3,10 @@ package com.example.administrator.tomato;
 
 import android.app.AlertDialog;
 import android.content.Context;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,15 +63,15 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
             public boolean onLongClick(View v) {
                //弹出修改/删除任务窗口
                 ArrayList<String> entrys = new ArrayList<String>();
-                entrys.add("Update Task");
-                entrys.add("Delete Task");
+                entrys.add("编辑任务");
+                entrys.add("删除任务");
 
                 final CharSequence[] items = entrys.toArray(new CharSequence[entrys.size()]);
 
 
                 // File delete confirm
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setTitle("Options");
+                builder.setTitle("操作");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         if (item == 0) {
@@ -138,57 +135,59 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
         Toast.makeText(mContext,"delete succesfully",Toast.LENGTH_SHORT).show();
         notifyItemRemoved(position);
     }
-    public void updateTask(int position, String name,long length) {
+    public void updateTask(int position, String name,long length)
+    {
             mDatabase.updateTask(mDatabase.getItemAt(position), name, length);
             Toast.makeText(mContext,"update sucessfully!",Toast.LENGTH_SHORT).show();
 
             notifyItemChanged(position);
-        }
-        public void addTask(String name,long length)
-        {
-            mDatabase.addTask(name,length);
-            notifyItemInserted(getItemCount() - 1);
-            llm.scrollToPosition(getItemCount() - 1);
-        }
+    }
+    public void addTask(String name,long length)
+    {
+        mDatabase.addTask(name,length);
+        notifyItemInserted(getItemCount() - 1);
+        llm.scrollToPosition(getItemCount() - 1);
+    }
 
 
-        public void  updateFileDialog(final int position)
-        {
-            AlertDialog.Builder renameFileBuilder = new AlertDialog.Builder(mContext);
+    public void  updateFileDialog(final int position)
+    {
+        AlertDialog.Builder renameFileBuilder = new AlertDialog.Builder(mContext);
 
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            View view = inflater.inflate(R.layout.dialog_updata_task, null);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        View view = inflater.inflate(R.layout.dialog_updata_task, null);
 
-            final EditText input1 = (EditText) view.findViewById(R.id.task_name);
-            final EditText input2 = (EditText) view.findViewById(R.id.task_length);
-            renameFileBuilder.setTitle("重命名");
-            renameFileBuilder.setCancelable(true);
-            renameFileBuilder.setPositiveButton(mContext.getString(R.string.dialog_action_ok),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            try {
-                                String name = input1.getText().toString();
-                                int length = Integer.parseInt(input2.getText().toString());
-                                updateTask(position, name,length);
+        final EditText input1 = (EditText) view.findViewById(R.id.task_name);
+        final EditText input2 = (EditText) view.findViewById(R.id.task_length);
+        renameFileBuilder.setTitle("重命名");
+        renameFileBuilder.setCancelable(true);
+        renameFileBuilder.setPositiveButton(mContext.getString(R.string.dialog_action_ok),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            String name = input1.getText().toString();
+                            int length = Integer.parseInt(input2.getText().toString());
+                            updateTask(position, name,length);
 
-                            } catch (Exception e) {
-                                Log.e(LOG_TAG, "exception", e);
-                            }
-
-                            dialog.cancel();
+                        } catch (Exception e) {
+                            Log.e(LOG_TAG, "exception", e);
                         }
-                    });
-            renameFileBuilder.setNegativeButton(mContext.getString(R.string.dialog_action_cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            renameFileBuilder.setView(view);
-            AlertDialog alert = renameFileBuilder.create();
-            alert.show();
-        }
-    public void deleteFileDialog (final int position) {
+
+                        dialog.cancel();
+                    }
+                });
+        renameFileBuilder.setNegativeButton(mContext.getString(R.string.dialog_action_cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        renameFileBuilder.setView(view);
+        AlertDialog alert = renameFileBuilder.create();
+        alert.show();
+    }
+    public void deleteFileDialog (final int position)
+    {
         // File delete confirm
         AlertDialog.Builder confirmDelete = new AlertDialog.Builder(mContext);
         confirmDelete.setTitle("删除任务");
@@ -218,6 +217,6 @@ public class TaskViewerAdapter extends RecyclerView.Adapter<TaskViewerAdapter.Ta
         AlertDialog alert = confirmDelete.create();
         alert.show();
     }
-    }
+}
 
 
